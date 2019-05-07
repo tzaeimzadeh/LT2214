@@ -1,8 +1,9 @@
-resource MiniResEng = open Prelude in {
+resource MiniResFas = open Prelude in {
 
 param
   Number = Sg | Pl ;
   Case = Nom | Acc ;
+  Species = Indef | Def ;
   Person = Per1 | Per2 | Per3 ;
 
   Agreement = Agr Number Person ;
@@ -11,21 +12,13 @@ param
   VForm = Inf | PresSg3 | Past | PastPart | PresPart ; 
 
 oper
-  Noun : Type = {s : Number => Str} ;
+  Noun : Type = {s : Number => Species => Str} ;
 
   mkNoun : Str -> Str -> Noun = \sg,pl -> {
     s = table {Sg => sg ; Pl => pl}
     } ;
 
-  regNoun : Str -> Noun = \sg -> mkNoun sg (sg + "s") ;
-
-  -- smart paradigm
-  smartNoun : Str -> Noun = \sg -> case sg of {
-    _ + ("ay"|"ey"|"oy"|"uy") => regNoun sg ;
-    x + "y"                   => mkNoun sg (x + "ies") ;
-    _ + ("ch"|"sh"|"s"|"o")   => mkNoun sg (sg + "es") ;
-    _                         => regNoun sg
-    } ;
+  regNoun : Str -> Noun = \sg -> mkNoun sg (sg + "ها") ;
 
   Adjective : Type = {s : Str} ;
 
