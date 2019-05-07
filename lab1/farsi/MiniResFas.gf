@@ -8,8 +8,10 @@ param
 
   Agreement = Agr Number Person ;
 
-  -- all forms of normal Eng verbs, although not yet used in MiniGrammar
-  VForm = Inf | PresSg3 | Past | PastPart | PresPart ; 
+  VForm = Inf | Polarity | PerfPar | VTense | PersonEnd ; 
+  Inf = InfPast | InfPres ;
+  PersonEnd = PPres | PFut | PPas | PImp | PPerf ;
+  VTense = Pres | Past | Fut ;  
 
 oper
   Noun : Type = {s : Number => Species => Str} ;
@@ -24,19 +26,19 @@ oper
 
   Verb : Type = {s : VForm => Str} ;
 
-  mkVerb : (inf,pres,past,pastpart,prespart : Str) -> Verb
+  mkVerb : (inf, polarity, perfpar, vtense, personend : Str) -> Verb
     = \inf,pres,past,pastpart,prespart -> {
     s = table {
       Inf => inf ;
-      PresSg3 => pres ;
-      Past => past ;
-      PastPart => pastpart ;
-      PresPart => prespart
+      Polarity => polarity ;
+      PerfPar => perfpar ;
+      VTense => vtense ;
+      PersonEnd => personend
       }
     } ;
 
   regVerb : (inf : Str) -> Verb = \inf ->
-    mkVerb inf (inf + "s") (inf + "ed") (inf + "ed") (inf + "ing") ;
+    mkVerb inf (inf + "تن") (inf + "دن") ;
 
   -- regular verbs with predictable variations
   smartVerb : Str -> Verb = \inf -> case inf of {
@@ -53,7 +55,7 @@ oper
       let verb = smartVerb inf
       in mkVerb inf (verb.s ! PresSg3) past pastpart (verb.s ! PresPart) ;   
 
-  negation : Bool -> Str = \b -> case b of {True => [] ; False => "not"} ; 
+  negation : Bool -> Str = \b -> case b of {True => [] ; False => "ن"} ; 
 
   -- two-place verb with "case" as preposition; for transitive verbs, c=[]
   Verb2 : Type = Verb ** {c : Str} ;
