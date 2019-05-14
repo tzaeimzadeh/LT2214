@@ -2,16 +2,12 @@ resource MiniResFas = open Prelude in {
 
 param
   Number = Sg | Pl ;
-  Case = Nom | Acc ;
-  Species = Indef | Def ;
   Person = Per1 | Per2 | Per3 ;
+  VTense = Pres | Past  ;  
 
   Agreement = Agr Number Person ;
 
-  VForm = Inf | Polarity | PerfPar | VTense | PersonEnd ; 
-  Inf = InfPast | InfPres ;
-  PersonEnd = PPres | PFut | PPas | PImp | PPerf ;
-  VTense = Pres | Past | Fut ;  
+  VForm = VTense Person Number
 
 oper
   Noun : Type = {s : Number => Species => Str} ;
@@ -26,19 +22,53 @@ oper
 
   Verb : Type = {s : VForm => Str} ;
 
-  mkVerb : (inf, polarity, perfpar, vtense, personend : Str) -> Verb
-    = \inf,pres,past,pastpart,prespart -> {
+  mkVerb : (vtense, person, number, inf : Str) -> Verb
+    = \vt, p, n, inf -> {
     s = table {
+      VTense => v ;
+      Person => p ;
+      Number => n ;
       Inf => inf ;
-      Polarity => polarity ;
-      PerfPar => perfpar ;
-      VTense => vtense ;
-      PersonEnd => personend
       }
     } ;
 
-  regVerb : (inf : Str) -> Verb = \inf ->
-    mkVerb inf (inf + "تن") (inf + "دن") ;
+  personEnd : person -> number -> Str =\p,n ->
+    case <p,n> of {
+      <p1,sg> => "م" ;
+      <p2,sg> => "ی" ;
+      <p3,sg> => "د" ;
+      <p1,pl> => "یم" ;
+      <p2,pl> => "ید" ;
+      <p3,pl> => "ند" ;
+     }
+  -- this are suffixes - how do i do that ?       
+  mkVerb : Str -> Str 
+    = \inf -> init inf
+  
+  -- e.g.
+  N = {s: Number => Str
+  mkN : Str -> N =
+  \root =
+  { sg => root; 
+    pl => "bla" + root ;
+  }
+  }
+  
+  -- verbs in lexicon have infinitive stem
+    -- infinitive past = remove 'n' 
+    -- inf present = still working out the rule for this, as it's a bit more varied 
+  -- tense 
+    -- present = prefix 'mi' to inf present + personal ending
+    -- past = infinitive stem + personal ending 
+
+
+  negation : Bool -> Str = \b -> case b of {True => [] ; False => "ن"} ; -- this is a prefix
+
+      
+  --regVerb : (inf : Str) -> Verb = \inf ->
+    --mkVerb inf (inf + "تن") (inf + "دن") ;
+   
+
 
   -- regular verbs with predictable variations
   smartVerb : Str -> Verb = \inf -> case inf of {
@@ -49,13 +79,6 @@ oper
      _ => regVerb inf
      } ;
 
-  -- normal irregular verbs e.g. drink,drank,drunk
-  irregVerb : (inf,past,pastpart : Str) -> Verb =
-    \inf,past,pastpart ->
-      let verb = smartVerb inf
-      in mkVerb inf (verb.s ! PresSg3) past pastpart (verb.s ! PresPart) ;   
-
-  negation : Bool -> Str = \b -> case b of {True => [] ; False => "ن"} ; 
 
   -- two-place verb with "case" as preposition; for transitive verbs, c=[]
   Verb2 : Type = Verb ** {c : Str} ;
