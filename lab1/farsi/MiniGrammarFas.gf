@@ -1,5 +1,5 @@
 --# -path=.:../abstract
-concrete MiniGrammarEng of MiniGrammar = open MiniResEng, Prelude in {
+concrete MiniGrammarFas of MiniGrammar = open MiniResFas, Prelude in {
 
 
   lincat
@@ -158,44 +158,44 @@ concrete MiniGrammarEng of MiniGrammar = open MiniResEng, Prelude in {
     TSim  = {s = []    ; isPres = True} ;
     TAnt  = {s = []    ; isPres = False} ;
 
-    and_Conj = {s = "and"} ;
-    or_Conj = {s = "or"} ;
+    and_Conj = {s = "و"} ;
+    or_Conj = {s = "یا"} ;
 
-    every_Det = {s = "every" ; n = Sg} ;
+    every_Det = {s = "همه" ; n = Sg} ;
 
-    in_Prep = {s = "in"} ;
-    on_Prep = {s = "on"} ;
-    with_Prep = {s = "with"} ;
+    in_Prep = {s = "در"} ;
+    on_Prep = {s = "روی"} ;
+    with_Prep = {s = "با"} ;
 
     i_Pron = {
-      s = table {Nom => "I" ; Acc => "me"} ;
+      s = table {Nom => "من" ; Acc => "من"} ;
       a = Agr Sg Per1
       } ;
     youSg_Pron = {
-      s = \\_ => "you" ;
+      s = \\_ => "تو" ;
       a = Agr Sg Per2
       } ;
     he_Pron = {
-      s = table {Nom => "he" ; Acc => "him"} ;
+      s = table {Nom => "او" ; Acc => "او"} ;
       a = Agr Sg Per3
       } ;
     she_Pron = {
-      s = table {Nom => "she" ; Acc => "her"} ;
+      s = table {Nom => "او" ; Acc => "او"} ;
       a = Agr Sg Per3
       } ;
     we_Pron = {
-      s = table {Nom => "we" ; Acc => "us"} ;
+      s = table {Nom => "ما" ; Acc => "ما"} ;
       a = Agr Pl Per1
       } ;
     youPl_Pron = {
-      s = \\_ => "you" ;
+      s = \\_ => "شما" ;
       a = Agr Pl Per2
       } ;
     they_Pron = {
-      s = table {Nom => "they" ; Acc => "them"} ;
+      s = table {Nom => "آنها" ; Acc => "آنها"} ;
       a = Agr Pl Per2
       } ;
 
-    have_V2 = mkVerb "have" "has" "had" "had" "having" ** {c = []} ;
+    have_V2 = mkVerb "داشتن" "دارد" "داشت" "داشت" "داریم" ** {c = []} ;
 
 }
