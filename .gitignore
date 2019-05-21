@@ -1,0 +1,5 @@
+/lab1/english/*.gfo
+/lab1/swedish/*.gfo
+/lab1/abstract/*.gfo
+
+*.gfo
