@@ -71,8 +71,8 @@ oper
       }
     } ;
   
-  tenseVerb : (tense, infverb, personEnd : Str) -> Verb
-    = \tpres, tpast, infverb, personEnd -> {
+  tenseVerb : (personEnd : Str) -> Verb -> Verb
+    = \personEnd, infVerb -> {
       s = table {
         TPres => "می" + infVerb.inf ! infpres + personEnd ;  -- present = prefix 'mi' + inf present stem + personal ending
         TPast => infVerb.inf ! infpast + personEnd ;  -- past = inf past stem + personal ending 
