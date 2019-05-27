@@ -3,7 +3,7 @@ resource MiniResFas = open Prelude in {
 param
   Number = Sg | Pl ;
   Person = P1 | P2 | P3 ;
-  InfTense = IPres | IPast  ;  
+  Tense = Pres | Past  ;  
 
   Agreement = Agr Number Person ;
 
@@ -13,8 +13,8 @@ oper
   Noun : Type = {s : Number => Species => Str} ;
 
   mkNoun : Str -> Str -> Noun = \sg,pl -> {
-    s = table {Sg => sg ; Pl => pl}
-    } ;
+    s = table {Sg => sg ; Pl => pl} ;
+    } 
 
   regNoun : Str -> Noun = \sg -> mkNoun sg (sg + "ها") ;
 
@@ -24,8 +24,8 @@ oper
 
   mkVerb : Str -> Str -> Verb = \infPast, infPres -> {
     s = table {
-      IPast = init infPast ;
-      IPres = infPres
+      Past => init infPast + personEnd ;  -- past = inf past stem + personal ending 
+      Pres => "می" + infPres + personEnd -- present = prefix 'mi' + inf present stem + personal ending
       } ;
     } 
 
@@ -36,8 +36,8 @@ oper
       <p3,sg> => "د" ;
       <p1,pl> => "یم" ;
       <p2,pl> => "ید" ;
-      <p3,pl> => "ند" ;
-     } ;
+      <p3,pl> => "ند" 
+     } 
    
   -- verbs in lexicon have infinitive stem
   -- infpast = init inf  -- inf past stem is the inf stem minus the last letter (which is an n/ن)
@@ -46,14 +46,6 @@ oper
   --infpres = ; "کردن" => "کن"; "بودن" => "باش";"دادن" => "ده"; "رفتن" => "رو"; "شکستن" => "شکن"; "خریدن" => "خر"; "آمدن" => "آ"; "نوشیدن" => "نوش";
   -- "خوردن" => "خور"; "دویدن" => "دو";"دیدن" => "بین"; "پریدن" => "پر"; "کشتن" => "کش"; "خواندن" => "خوان"; "خوابیدن" => "خواب"; "فهمیدن" => "فهم"
 
-  
-  tenseVerb : (personEnd, InfTesnse : Str) -> Verb -> Verb
-    = \personEnd, InfTense -> {
-      s = table {
-        TPres => "می" + mkVerb ! IPres + personEnd ;  -- present = prefix 'mi' + inf present stem + personal ending
-        TPast => mkVerb !IPast + personEnd ;  -- past = inf past stem + personal ending 
-      }
-    } ;
   
   negation : Bool -> Str = \b -> case b of {True => [] ; False => "ن" + mkVerb} ; -- the 'ن' is attached as a prefix to the verb
 
