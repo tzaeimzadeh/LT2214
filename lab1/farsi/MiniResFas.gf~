@@ -12,11 +12,11 @@ param
 oper
   Noun : Type = {s : Number => Str} ;
 
-  -- mkNoun : Str -> Str -> Noun = \sg,pl -> { s = table {Sg => sg ; Pl => pl} ;    } 
+  mkNoun : Str -> Str -> Noun = \sg,pl -> {
+    s = table {Sg => sg ; Pl => pl} ;
+    } 
 
-  -- regNoun : Str -> Noun = \sg -> mkNoun sg (sg + "ها") ;
-
-  mkNoun : Str -> Noun = \sg -> mkNoun sg (sg + "ها") ;
+  regNoun : Str -> Noun = \sg -> mkNoun sg (sg + "ها") ;
 
   Adjective : Type = {s : Str} ;
 

@@ -8,7 +8,7 @@ in {
 oper
   mkN = overload {
     mkN : Str -> Noun   -- predictable noun, e.g. "کتاب" -> "کتاب ها"
-      = \n -> lin N (mkNoun n) ;
+      = \n -> lin N (regNoun n) ;
     } ;
 
   mkPN : Str -> PN
