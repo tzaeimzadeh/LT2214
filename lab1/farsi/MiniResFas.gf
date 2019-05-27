@@ -10,7 +10,7 @@ param
   VForm = VF VTense Person Number ;
 
 oper
-  Noun : Type = {s : Number => Species => Str} ;
+  Noun : Type = {s : Number => Str} ;
 
   mkNoun : Str -> Str -> Noun = \sg,pl -> {
     s = table {Sg => sg ; Pl => pl} ;
@@ -24,19 +24,19 @@ oper
 
   mkVerb : Str -> Str -> Verb = \infPast, infPres -> {
     s = table {
-      Past => init infPast + personEnd ;  -- past = inf past stem + personal ending 
-      Pres => "می" + infPres + personEnd -- present = prefix 'mi' + inf present stem + personal ending
+      VF Past p n => init infPast + personEnd p n;  -- past = inf past stem + personal ending 
+      VF Pres p n => "می" + infPres + personEnd p n -- present = prefix 'mi' + inf present stem + personal ending
       } ;
     } 
 
   personEnd : Person -> Number -> Str =\p,n ->
     case <p,n> of {
-      <p1,sg> => "م" ;
-      <p2,sg> => "ی" ;
-      <p3,sg> => "د" ;
-      <p1,pl> => "یم" ;
-      <p2,pl> => "ید" ;
-      <p3,pl> => "ند" 
+      <P1,Sg> => "م" ;
+      <P2,Sg> => "ی" ;
+      <P3,Sg> => "د" ;
+      <P1,Pl> => "یم" ;
+      <P2,Pl> => "ید" ;
+      <P3,Pl> => "ند" 
      } 
    
   -- verbs in lexicon have infinitive stem
