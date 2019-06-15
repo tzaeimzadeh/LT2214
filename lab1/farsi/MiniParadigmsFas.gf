@@ -1,3 +1,4 @@
+--# -path=.:../abstract
 resource MiniParadigmsFas = open
 
   MiniGrammarFas,
@@ -6,9 +7,8 @@ resource MiniParadigmsFas = open
 in {
 
 oper
-  mkN = overload {
-    mkN : Str -> Noun   -- predictable noun, e.g. "کتاب" -> "کتاب ها"
-      = \n -> lin N (mkNoun n) ;
+  mkN : Str -> Noun   -- predictable noun, e.g. "کتاب" -> "کتاب ها"
+      = \n -> lin N (regNoun = n) ;
     } ;
 
   mkPN : Str -> PN
@@ -24,9 +24,9 @@ oper
 
   mkV2 = overload {
     mkV2 : Str -> V2          -- predictable verb with direct object, e.g. "wash" ?
-      = \s   -> lin V2 (tenseVerb s ** {c = []}) ;
+      = \s   -> lin V2 (mkVerb s ** {c = []}) ;
     mkV2 : Str  -> Str -> V2  -- predictable verb with preposition, e.g. "wait - for" ?
-      = \s,p -> lin V2 (tenseVerb s ** {c = p}) ;
+      = \s,p -> lin V2 (mkVerb s ** {c = p}) ;
     mkV2 : V -> V2            -- any verb with direct object, e.g. "drink" ?
       = \v   -> lin V2 (v ** {c = []}) ;
     mkV2 : V -> Str -> V2     -- any verb with preposition

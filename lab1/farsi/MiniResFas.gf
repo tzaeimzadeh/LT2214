@@ -1,3 +1,4 @@
+--# -path=.:../abstract
 resource MiniResFas = open Prelude in {
 
 param
@@ -5,18 +6,22 @@ param
   Person = P1 | P2 | P3 ;
   Tense = Pres | Past  ;  
 
-  Agreement = Agr Number Person ;
+  Agreement = Agr Person Number ;
 
-  VForm = VF VTense Person Number ;
+  VForm = VF Tense Person Number ;
 
 oper
   Noun : Type = {s : Number => Str} ;
 
-  -- mkNoun : Str -> Str -> Noun = \sg,pl -> { s = table {Sg => sg ; Pl => pl} ;    } 
+  mkNoun : Str -> Str -> Noun = \sg,pl -> { 
+    s = table {
+      Sg => sg ; 
+      Pl => pl} 
+    } ; 
 
-  -- regNoun : Str -> Noun = \sg -> mkNoun sg (sg + "ها") ;
+  regNoun : Str -> Noun = \sg -> mkNoun sg (sg + "ها") ;
 
-  mkNoun : Str -> Noun = \sg -> mkNoun sg (sg + "ها") ;
+  -- mkNoun : Str -> Noun = \sg -> mkNoun sg (sg + "ها") ;
 
   Adjective : Type = {s : Str} ;
 
@@ -26,18 +31,18 @@ oper
     s = table {
       VF Past p n => init infPast + personEnd p n;  -- past = inf past stem + personal ending 
       VF Pres p n => "می" + infPres + personEnd p n -- present = prefix 'mi' + inf present stem + personal ending
-      } ;
-    } 
+      } 
+    } ;
 
   personEnd : Person -> Number -> Str =\p,n ->
-    case <p,n> of {
+     case <p,n> of {
       <P1,Sg> => "م" ;
       <P2,Sg> => "ی" ;
       <P3,Sg> => "د" ;
       <P1,Pl> => "یم" ;
       <P2,Pl> => "ید" ;
       <P3,Pl> => "ند" 
-     } 
+     } ;
    
   -- verbs in lexicon have infinitive stem
   -- infpast = init inf  -- inf past stem is the inf stem minus the last letter (which is an n/ن)
@@ -47,7 +52,7 @@ oper
   -- "خوردن" => "خور"; "دویدن" => "دو";"دیدن" => "بین"; "پریدن" => "پر"; "کشتن" => "کش"; "خواندن" => "خوان"; "خوابیدن" => "خواب"; "فهمیدن" => "فهم"
 
   
-  negation : Bool -> Str = \b -> case b of {True => [] ; False => "ن" + mkVerb} ; -- the 'ن' is attached as a prefix to the verb
+  negation : Bool -> Str -> Str = \b,verb -> case b of {True => verb ; False => "ن" + verb} ; -- the 'ن' is attached as a prefix to the verb
 
   -- two-place verb with "case" as preposition; for transitive verbs, c=[]
   Verb2 : Type = Verb ** {c : Str} ;

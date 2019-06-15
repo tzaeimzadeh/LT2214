@@ -66,18 +66,16 @@ concrete MiniGrammarFas of MiniGrammar = open MiniResFas, Prelude in {
       compl = vp.compl ;
       verb = \\plain,isPres => case <vp.verb.isAux, plain, isPres, np.a> of {
 
-        -- non-auxiliary verbs, negative/question present: "does (not) drink" 
-        <False,False,True,Agr Sg Per3> => {fin = "does" ; inf = vp.verb.s ! VF Inf} ;
-        <False,False,True,_          > => {fin = "do"   ; inf = vp.verb.s ! VF Inf} ;
+        -- non-auxiliary verbs, negative/question present: "does (not) drink"
+        <False,False,True,_          > => {fin = "کردن"   ; inf = vp.verb.s ! VF Inf} ;
 	
         -- non-auxiliary, plain present ; auxiliary, all present: "drinks", "is (not)"
-        <_,_, True, Agr Sg Per1> => {fin = vp.verb.s ! PresSg1    ; inf = []} ;
-        <_,_, True, Agr Sg Per3> => {fin = vp.verb.s ! VF PresSg3 ; inf = []} ;
+        <_,_, True, Agr Sg P1> => {fin = vp.verb.s ! PresSg1    ; inf = []} ;
+        <_,_, True, Agr Sg P3> => {fin = vp.verb.s ! VF PresSg3 ; inf = []} ;
         <_,_, True, _>           => {fin = vp.verb.s ! PresPl     ; inf = []} ;
 
         -- all verbs, past: "has (not) drunk", "has (not) been"
-        <_,_, False,Agr Sg Per3> => {fin = "has"  ; inf = vp.verb.s ! VF PastPart} ;
-        <_,_, False,_          > => {fin = "have" ; inf = vp.verb.s ! VF PastPart} 
+        <_,_, False,_          > => {fin = "داشتن" ; inf = vp.verb.s ! VF PastPart} 
 
         -- the negation word "not" is put in place in UseCl, UseQCl
       }
@@ -86,7 +84,7 @@ concrete MiniGrammarFas of MiniGrammar = open MiniResFas, Prelude in {
     ImpVP vp = {
       s = table {
         True  => vp.verb.s ! VF Inf ++ vp.compl ;    -- in Eng, imperative = infinitive
-        False => "do not" ++ vp.verb.s ! VF Inf ++ vp.compl
+        False => "ن" ++ vp.verb.s ! VF Inf ++ vp.compl
         }
       } ;
 
@@ -120,25 +118,20 @@ concrete MiniGrammarFas of MiniGrammar = open MiniResFas, Prelude in {
       
     DetCN det cn = {
       s = table {c => det.s ++ cn.s ! det.n} ;
-      a = Agr det.n Per3   -- this kind of NP is always third person
+      a = Agr det.n P3   -- this kind of NP is always third person
       } ;
       
     UsePN pn = {
       s = \\_ => pn.s ;
-      a = Agr Sg Per3
+      a = Agr Sg P3
       } ;
       
     UsePron p = p ;  -- Pron is worst-case NP  
       
     MassNP cn = {
       s = \\_ => cn.s ! Sg ;
-      a = Agr Sg Per3
+      a = Agr Sg P3
       } ;
-      
-    a_Det = {s = pre {"a"|"e"|"i"|"o" => "an" ; _ => "a"} ; n = Sg} ; --- a/an can get wrong
-    aPl_Det = {s = "" ; n = Pl} ;
-    the_Det = {s = "the" ; n = Sg} ;
-    thePl_Det = {s = "the" ; n = Pl} ;
     
     UseN n = n ;
     
@@ -169,31 +162,31 @@ concrete MiniGrammarFas of MiniGrammar = open MiniResFas, Prelude in {
 
     i_Pron = {
       s = table {Nom => "من" ; Acc => "من"} ;
-      a = Agr Sg Per1
+      a = Agr Sg P1
       } ;
     youSg_Pron = {
       s = \\_ => "تو" ;
-      a = Agr Sg Per2
+      a = Agr Sg P2
       } ;
     he_Pron = {
       s = table {Nom => "او" ; Acc => "او"} ;
-      a = Agr Sg Per3
+      a = Agr Sg P3
       } ;
     she_Pron = {
       s = table {Nom => "او" ; Acc => "او"} ;
-      a = Agr Sg Per3
+      a = Agr Sg P3
       } ;
     we_Pron = {
       s = table {Nom => "ما" ; Acc => "ما"} ;
-      a = Agr Pl Per1
+      a = Agr Pl P1
       } ;
     youPl_Pron = {
       s = \\_ => "شما" ;
-      a = Agr Pl Per2
+      a = Agr Pl P2
       } ;
     they_Pron = {
       s = table {Nom => "آنها" ; Acc => "آنها"} ;
-      a = Agr Pl Per2
+      a = Agr Pl P2
       } ;
 
     have_V2 = mkVerb "داشتن" "دارد" "داشت" "داشت" "داریم" ** {c = []} ;
